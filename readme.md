@@ -1,43 +1,44 @@
-aws-infrastructure-journey/
-├── README.md
-├── LICENSE
-├── .gitignore
-├── .pre-commit-config.yaml
-├── .tflint.hcl
-├── Makefile
-├── docs/
-│   ├── naming-convention.md
-│   ├── tagging-strategy.md
-│   └── module-catalog.md          # daftar semua module yang tersedia + cara pakai
-├── modules/                        # <<< SEMUA REUSABLE MODULE ADA DI SINI
-│   ├── vpc/
-│   ├── security-group/
-│   ├── ec2-instance/
-│   ├── iam-role/
-│   ├── s3-bucket/
-│   ├── rds-instance/
-│   ├── alb/
-│   ├── autoscaling-group/
-│   ├── lambda-function/
-│   ├── ecs-fargate-service/
-│   ├── sns-topic/
-│   ├── sqs-queue/
-│   ├── cloudwatch-alarm/
-│   └── route53-record/
-└── topics/       
-    ├── 00-terraform-fundamentals/
-    ├── 01-iam-foundations/
-    ├── 02-networking-vpc/
-    ├── 03-compute-ec2/
-    ├── 04-storage-s3/
-    ├── 05-database-rds/
-    ├── 06-load-balancing-autoscaling/
-    ├── 07-serverless-lambda/
-    ├── 08-containers-ecs-eks/
-    ├── 09-dns-cdn-route53-cloudfront/
-    ├── 10-messaging-sns-sqs/
-    ├── 11-monitoring-cloudwatch/
-    ├── 12-security-kms-secrets-manager/
-    ├── 13-terraform-state-management/
-    ├── 14-cost-optimization/
-    └── capstone-project/
+# AWS Journey — From IT Support to Cloud Engineer
+
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=flat&logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=flat&logo=amazon-aws&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+## About This Repo
+Repo ini adalah dokumentasi perjalanan saya belajar AWS secara terstruktur menggunakan
+Terraform, sambil bekerja sebagai IT Support. Setiap folder di `topics/` adalah satu
+service/konsep AWS yang saya pelajari dengan cara langsung praktik (learning by doing),
+bukan sekadar baca dokumentasi.
+
+**Kenapa repo ini publik:** Saya percaya proses belajar itu sendiri punya nilai untuk
+ditunjukkan — bukan cuma hasil akhir. Repo ini menunjukkan bagaimana saya mendekati
+masalah baru, riset, dan iterasi.
+
+## Certifications
+- ✅ AWS Certified Cloud Practitioner
+- ✅ AWS Certified Solutions Architect – Associate
+- 🔄 Microsoft Certified: Azure Administrator Associate (AZ-104) — in progress
+
+## Roadmap & Progress
+
+| # | Topic | Status | AWS Services | Notes |
+|---|---|---|---|---|
+| 00 | [Terraform Fundamentals](./topics/00-terraform-fundamentals) | ✅ Done | - | State, variables, modules |
+| 01 | [IAM Foundations](./topics/01-iam-foundations) | ✅ Done | IAM | Least privilege practice |
+| 02 | [Networking VPC](./topics/02-networking-vpc) | 🔄 In Progress | VPC, NAT, Subnet | |
+| 03 | [Compute EC2](./topics/03-compute-ec2) | ⬜ Not Started | EC2, EBS | |
+| ... | ... | ... | ... | |
+
+## Reusable Terraform Modules
+Semua module di `/modules` ditulis reusable dan dipakai berkali-kali di berbagai topic —
+lihat [module catalog](./modules/README.md) untuk daftar lengkap dan cara pakai.
+
+## Capstone Project
+Proyek akhir yang menggabungkan seluruh topic jadi satu arsitektur 3-tier web app —
+[lihat detail di sini](./capstone-project/).
+
+## Tech Stack
+Terraform · AWS · GitHub Actions (planned) · tflint · pre-commit
+
+## Connect
+[LinkedIn] · [Blog/Medium jika ada]
