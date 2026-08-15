@@ -1,4 +1,4 @@
-# 🚀 AWS Journey – Chapter 01: IAM Foundations
+# AWS Journey – Chapter 01: IAM Foundations
 
 ![AWS](https://img.shields.io/badge/AWS-IAM-orange?logo=amazon-aws)
 ![Terraform](https://img.shields.io/badge/IaC-Terraform_v1.5+-purple?logo=terraform)
