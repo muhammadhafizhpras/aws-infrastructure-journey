@@ -1,28 +1,28 @@
 #IAM Account Password Policy
 resource "aws_iam_account_password_policy" "strict_policy" {
-    minimum_password_length         = var.password_minimum_length
+    minimum_password_length         = var.minimum_password_length
     require_lowercase_characters    = var.require_lowercase_characters
     require_uppercase_characters    = var.require_uppercase_characters
-    require_number                  = var.require_number
+    require_numbers                  = var.require_numbers
     require_symbols                 = var.require_symbols
-    allow_user_to_change_password   = var.user_change_password
+    allow_users_to_change_password   = var.allow_user_to_change_password
     password_reuse_prevention       = var.password_reuse_prevention
     max_password_age                = var.max_password_age
 }
 
 #IAM User Group
-resource "aws_iam_group" "admin" {
-    name = var.admin_group_name
+resource "aws_iam_group" "group" {
+    name = var.group_name
 }
 
-resource "aws_iam_group_policy_attachment" "admin_policy_attach" {
-    group       = aws_iam_group:admins.name
-    Policy_arn  = "arn:aws:iam::aws:policy/AdministratorAccess"
+resource "aws_iam_group_policy_attachment" "group_policy_attach" {
+    group       = aws_iam_group.group.name
+    policy_arn  = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 #IAM User
-resource "aws_iam_user" "admin_user" {
-    name = var.admin_user_name
+resource "aws_iam_user" "user" {
+    name = var.user_name
     path = "/"
 
     tags = {
@@ -31,11 +31,19 @@ resource "aws_iam_user" "admin_user" {
   }
 }
 
+resource "aws_iam_user_login_profile" "user_console" {
+  user                    = aws_iam_user.user.name
+  password                = var.password_mode == "custom" ? var.custom_password : null
+  password_length         = var.minimum_password_length
+  password_reset_required = true
+
+}
+
 #Add User to Group
-resource "aws_iam_user_group_membership" "admin_team" {
-  name  = "${var.admin_group_name}-membership"
-  users = [aws_iam_user.admin_user.name]
-  group = aws_iam_group.admins.name
+resource "aws_iam_group_membership" "team" {
+  name  = "${var.group_name}-membership"
+  users = [aws_iam_user.user.name]
+  group = aws_iam_group.group.name
 }
 
 #IAM ROLE

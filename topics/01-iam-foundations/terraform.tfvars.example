@@ -2,11 +2,10 @@ aws_region              = "ap-southeast-1"
 environment             = "portfolio"
 
 # Password Policy Configuration
-password_minimum_length         = 14
-password_max_age                = 90
-minimum_password_length         = true
+max_password_age                = 90
+minimum_password_length         = 14
 require_uppercase_characters    = true
-require_number                  = true
+require_numbers                 = true
 require_symbols                 = true
 allow_user_to_change_password   = true
 password_reuse_prevention       = 5
@@ -14,6 +13,6 @@ password_reuse_prevention       = 5
 
 
 # IAM Naming
-admin_group_name        = "Administrators"
-admin_user_name         = "admin-dev"
-ec2_role_name           = "EC2-S3-ReadOnly-Role"
+group_name        = "Administrators"
+user_name         = "prasetyo-support"
+ec2_role_name     = "EC2-S3-ReadOnly-Role"

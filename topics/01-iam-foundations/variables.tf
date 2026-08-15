@@ -1,3 +1,10 @@
+#Region
+variable "aws_region" {
+  description = "region"
+  type        = string
+  default     = "ap-southeast-3"
+}
+
 # Environment
 variable "environment" {
   description = "ENV Name (dev, stag, prod)"
@@ -5,8 +12,9 @@ variable "environment" {
   default     = "dev"
 }
 
+### -----------------------Password Policy--------------------------####
 # Minimum Password Length
-variable "password_minimum_length" {
+variable "minimum_password_length" {
   description = "Minimum Length Password"
   type        = number
   default     = 14
@@ -20,21 +28,21 @@ variable "max_password_age" {
 }
 
 # Lowercase Password Required
-variable "lowercase_characters" {
+variable "require_lowercase_characters" {
   description = "Lowercase Characters Required"
   type        = bool
   default     = true
 }
 
 # Uppercase Password Required
-variable "uppercase_characters" {
+variable "require_uppercase_characters" {
   description = "Uppercase Characters Required"
   type        = bool
   default     = true
 }
 
 # Number Required
-variable "require_number" {
+variable "require_numbers" {
   description = "Number Required"
   type        = bool
   default     = true
@@ -47,8 +55,8 @@ variable "require_symbols" {
   default     = true
 }
 
-# User can Change Password
-variable "user_change_password" {
+# User Can Change Password
+variable "allow_user_to_change_password" {
   description = "User can change password or not"
   type        = bool
   default     = true
@@ -61,33 +69,49 @@ variable "password_reuse_prevention" {
   default     = 5
 }
 
-# IAM Group
-variable "admin_group_name" {
-  description = "Group Name for Administrator Permission"
+#Password Mode for user
+variable "password_mode" {
+  description = "Password = generated or custom"
   type        = string
-  default     = "Administrators"
+  default     = "generated"
+
+  validation {
+    condition     = contains(["generated","custom"], var.password_mode)
+    error_message = "Choose = generated or custom"
+  }
+}
+
+#Custom Password for user
+variable "custom_password" {
+  description = "Password Custom Mode Must >= 8 Characters"
+  type        = string
+  default     = null
+  sensitive   = true
+
+  validation {
+    condition     = var.custom_password == null || length(var.custom_password) >= 8
+    error_message = "Custom password must 8 characters"
+  }
+}
+
+###---------------------- IAM Idendity -------------------------###
+# IAM Group
+variable "group_name" {
+  description = "Group Name"
+  type        = string
+  default     = "Group Name?"
 }
 
 # IAM User
-variable "admin_user_name" {
-  description = "User Name for Administrator Permission"
+variable "user_name" {
+  description = "User Name for User"
   type        = string
-  default     = "admin-user"
+  default     = "User Name?"
 }
 
 # IAM Role
-variable "ec2_role" {
+variable "ec2_role_name" {
   description = "IAM Role Name for EC2 on AWS"
   type        = string
   default     = "EC2-S3-Readonly-Role"
-<<<<<<< Updated upstream
-=======
-}
-
-#AWS Console Access
-variable "console_access" {
-  description = "Active Console Access"
-  type        = string
-  default     = true
->>>>>>> Stashed changes
 }
