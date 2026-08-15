@@ -40,21 +40,10 @@ The first chapter of the *AWS Infrastructure Journey* — building a solid **Ide
 `aws_iam_account_password_policy` enforced at account level:
 minimum **14** characters, lowercase/uppercase letters, numbers and symbols required, reuse prevention **5**, maximum age **90** days.
 
-### 2. Console User (generated / custom + forced reset)
-`aws_iam_user_login_profile` follows the `password_mode` variable:
-
-| Mode | Behavior |
-|---|---|
-| `generated` (default) | Terraform generates a random password of `password_length` characters |
-| `custom` | uses the `custom_password` value (≥ 8 characters, validated) |
-
-`password_reset_required = true` → the user **must change the password at first sign-in**.
-Retrieve the initial password with: `terraform output admin_initial_password` (marked `sensitive`).
-
-### 3. Group & Membership
+### 2. Group & Membership
 `aws_iam_group` with the managed `AdministratorAccess` policy; the user joins the group via `aws_iam_group_membership`.
 
-### 4. EC2 Role
+### 3. EC2 Role
 - Service trust policy for `ec2.amazonaws.com` built with `aws_iam_policy_document`.
 - Managed `AmazonS3ReadOnlyAccess` policy + `aws_iam_instance_profile` so the role can be attached to an EC2 instance.
 
