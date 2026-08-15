@@ -58,7 +58,6 @@ cp terraform.tfvars.example terraform.tfvars   # then edit to your needs
 terraform init
 terraform plan    # review first
 terraform apply   # then:
-terraform output admin_initial_password        # fetch the initial password
 ```
 
 Sign in → **change your password** (forced). When done learning: `terraform destroy`.
