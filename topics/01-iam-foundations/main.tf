@@ -32,7 +32,7 @@ resource "aws_iam_user" "admin_user" {
 }
 
 #Add User to Group
-resource "aws_iam_group_membership" "admin_team" {
+resource "aws_iam_user_group_membership" "admin_team" {
   name  = "${var.admin_group_name}-membership"
   users = [aws_iam_user.admin_user.name]
   group = aws_iam_group.admins.name

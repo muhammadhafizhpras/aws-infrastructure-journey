@@ -80,4 +80,14 @@ variable "ec2_role" {
   description = "IAM Role Name for EC2 on AWS"
   type        = string
   default     = "EC2-S3-Readonly-Role"
+<<<<<<< Updated upstream
+=======
+}
+
+#AWS Console Access
+variable "console_access" {
+  description = "Active Console Access"
+  type        = string
+  default     = true
+>>>>>>> Stashed changes
 }
