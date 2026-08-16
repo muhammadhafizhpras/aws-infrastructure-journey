@@ -123,11 +123,11 @@ topics/02-networking-vpc/
 
 The topics are ordered intentionally — each one builds on knowledge from the previous. It's recommended to follow the order below rather than jumping around.
 
-| # | Topic | Status | AWS Services | Certification Focus |
+| # | Topic | Status | AWS Services | Date |
 |---|---|---|---|---|
 | 00 | [Terraform Fundamentals](./topics/00-terraform-fundamentals) | ✅ Done | - | - |
-| 01 | [IAM Foundations](./topics/01-iam-foundations) | 🔄 In Progress | IAM | SAA, AZ-104 |
-| 02 | [Networking (VPC)](./topics/02-networking-vpc) | ⬜ Not Started | VPC, Subnet, NAT, IGW | SAA |
+| 01 | [IAM Foundations](./topics/01-iam-foundations) | ✅ Done | IAM | 15-16. August 2026 |
+| 02 | [Networking (VPC)](./topics/02-networking-vpc) | 🔄 In Progress | VPC, Subnet, NAT, IGW | SAA |
 | 03 | [Compute (EC2)](./topics/03-compute-ec2) | ⬜ Not Started | EC2, EBS, AMI | SAA |
 | 04 | [Storage (S3)](./topics/04-storage-s3) | ⬜ Not Started | S3, Lifecycle Policy | SAA |
 | 05 | [Database (RDS)](./topics/05-database-rds) | ⬜ Not Started | RDS, Multi-AZ, Read Replica | SAA |
