@@ -1,1 +1,1 @@
-![AWS Architecture Diagram](./assets/02-networking-vpc.drawio.svg)
+![AWS Architecture Diagram](./assets/02-network-vpc-diagram.svg)
