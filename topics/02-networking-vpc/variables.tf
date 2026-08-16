@@ -101,3 +101,9 @@ variable "security_group_rules" {
     }
   ]
 }
+
+variable "tags" {
+  description = "Map tag tambahan (key-value), akan digabung ke semua resource"
+  type        = map(string)
+  default     = {}
+}
