@@ -1,0 +1,19 @@
+project_name = "learning"
+environment  = "prod"
+vpc_cidr     = "10.0.0.0/16"
+
+azs = ["ap-southeast-3a","ap-southeast-3b","ap-southeast-3c"]
+
+public_subnet = {
+    "public-a" = { cidr_block = 10.0.10.0/24, az = "ap-southeast-3a" }
+    "public-b" = { cidr_block = 10.0.20.0/24, az = "ap-southeast-3b" }
+    "public-c" = { cidr_block = 10.0.30.0/24, az = "ap-southeast-3c" }
+}
+
+enable_nat_gateway = true/false
+single_nat_gateway = true/false
+
+tags = {
+    Owner   = "ICT-Prasetyo"
+    CostCtr = "111604"
+}

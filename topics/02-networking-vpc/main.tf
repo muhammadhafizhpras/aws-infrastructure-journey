@@ -54,3 +54,94 @@ resource "aws_eip" "nat" {
         Name = "${local.name_resource}-eip"
     })
 }
+
+resource "aws_nat_gateway" "main" {
+    for_each = var.enable_nat_gateway ? local.nat_gateway_map : {}
+    allocation_id = aws_eip.nat[each.key].id
+    subnet_id     = aws_subnet.public[each.key].id
+
+    tags = merge({local.common_tags}, {
+        Name = "${local.name_resource}-nat"
+    })
+
+    depends_on = [aws_internet_gateway.main]
+}
+
+
+#Route Table
+resource "aws_route_table" "public" {
+    vpc_id  = aws_vpc.main.id
+
+    route {
+        cidr_block  = "0.0.0.0/0"
+        gateway_id  = aws_internet_gateway.main.id
+    }
+
+    tags = merge(local.common_tags, {
+        Name = "${local.name_resource}-rt-public"
+    })
+}
+
+#Route Table Association
+resource "aws_route_table_association" "public" {
+    for_each       = aws_subnet.public
+    subnet_id      = each.value.id
+    route_table_id = aws_route_table.public.id
+}
+
+# Route Table Private
+resource "aws_route_table" "private" {
+    for_each    = var.private_subnet
+    vpc_id      = aws_vpc.main.id
+
+    tags = merge(local.common_tags, {
+        Name = "${local.name_resource}-rt-${each.key}"
+    })
+}
+
+# Route Private
+resource "aws_route" "private_nat" {
+    for_each        = var.enable_nat_gateway ? var.private_subnet : {}
+    route_table_id  = aws_route_table.private[each.key].id : lookup(
+        local.nat_gateway_by_az,
+        each.value.az,
+        values(aws_nat_gateway.main)[0].id
+    )
+}
+
+# Route Table Association Private
+resource "aws_route_table_association" "private" {
+    for_each        = aws_subnet.Private
+    subnet_id       = each.value.vpc_id
+    route_table_id  = aws_route_table.private[each.key].id
+}
+
+# Security Group
+resource "aws_security_group" "app" {
+    name        = "${local.name_resource}-app-sg"
+    description = "SG for APP"
+    vpc_id      = aws_vpc.main.id
+
+    dynamic "ingress" {
+        for_each = var.security_group_rules
+        content {
+            description = ingress.value.description
+            from_port   = ingress.value.from_port
+            to_port     = ingress.value.to_port
+            protocol    = ingress.value.protocol
+            cidr_block  = ingress.value.cidr_blocks
+        }
+    }
+
+    egress {
+        description = "Allow ALL Traffic Out"
+        from_port   = 0
+        to_port     = 0
+        protocol   = "-1"
+        cidr_block  = ["0.0.0.0/0"] 
+    }
+
+    tags = merge(local.common_tags , {
+        Name = "${local.name_resource}app-sg"
+    })
+}
