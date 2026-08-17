@@ -150,6 +150,6 @@ resource "aws_security_group" "app" {
     }
 
     tags = merge(local.common_tags , {
-        Name = "${local.name_resource}app-sg"
+        Name = "${local.name_resource}-app-sg"
     })
 }

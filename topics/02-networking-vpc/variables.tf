@@ -25,12 +25,6 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "az" {
-  description = "List of Availability Zone"
-  type        = list(string)
-  default     = ["ap-southeast-3a","ap-southeast3b","ap-southeast-3c"]
-
-}
 variable "public_subnet" {
   description   = "List of Public Subnet"
   type          = map(object({
