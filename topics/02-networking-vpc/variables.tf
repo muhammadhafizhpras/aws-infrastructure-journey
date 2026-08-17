@@ -25,7 +25,7 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variables "az" {
+variable "az" {
   description = "List of Availability Zone"
   type        = list(string)
   default     = ["ap-southeast-3a","ap-southeast3b","ap-southeast-3c"]
@@ -38,9 +38,9 @@ variable "public_subnet" {
     az          = string
   }))
   default       = {
-    "public-a"  = { cidr_block = "10.0.10.0/24". az = "ap-southeast-3a"}
-    "public-b"  = { cidr_block = "10.0.20.0/24". az = "ap-southeast-3b"}
-    "public-c"  = { cidr_block = "10.0.30.0/24". az = "ap-southeast-3c"}
+    "public-a"  = { cidr_block = "10.0.10.0/24", az = "ap-southeast-3a"}
+    "public-b"  = { cidr_block = "10.0.20.0/24", az = "ap-southeast-3b"}
+    "public-c"  = { cidr_block = "10.0.30.0/24", az = "ap-southeast-3c"}
   }
 }
 
@@ -63,7 +63,7 @@ variable "enable_nat_gateway" {
   default       = true
 }
 
-variable "single_nat_gatewaay" {
+variable "single_nat_gateway" {
   description   = "only for 1 nat gateway for cost optimize"
   type          = bool
   default       = false

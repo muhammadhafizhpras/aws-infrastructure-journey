@@ -18,7 +18,7 @@ output "nat_gateway_ids" {
 
 output "security_group_web_id" {
   description = "ID security group web tier"
-  value       = aws_security_group.web.id
+  value       = aws_security_group.app.id
 }
 
 output "route_table_public_id" {

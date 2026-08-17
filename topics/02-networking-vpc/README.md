@@ -24,6 +24,28 @@ This topic provisions a **VPC** for the `portofolio` project using Terraform, fo
 - `providers.tf` applies `default_tags` so every resource is automatically tagged.
 - `security_group_rules` variable is prepared for web/SSH ingress rules (HTTP 80, HTTPS 443, SSH 22).
 
+## Screenshots (AWS Console)
+
+### VPC
+
+![VPC di AWS Console](./assets/vpc.png)
+
+### Subnets
+
+![Subnets di AWS Console](./assets/subnet.png)
+
+### Route Tables
+
+![Route Tables di AWS Console](./assets/route-table.png)
+
+### NAT Gateway
+
+![NAT Gateway di AWS Console](./assets/nat-gateway.png)
+
+### Elastic IP
+
+![Elastic IP di AWS Console](./assets/eip.png)
+
 ## Files
 
 ```text

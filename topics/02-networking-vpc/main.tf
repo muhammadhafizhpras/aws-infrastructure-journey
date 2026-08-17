@@ -3,14 +3,15 @@
 resource "aws_vpc" "main" {
     cidr_block            = var.vpc_cidr
     enable_dns_support    = true
-    enable_dns_hostnnames = true
+    enable_dns_hostnames = true
 
     tags = merge(local.common_tags, {
         Name = "${local.name_resource}"
     })
 }
 
-resource "aws_internet_gateway" "igw" {
+# Internet Gateway
+resource "aws_internet_gateway" "main" {
     vpc_id  = aws_vpc.main.id
 
     tags = merge(local.common_tags, {
@@ -18,21 +19,23 @@ resource "aws_internet_gateway" "igw" {
     })
 }
 
-
+# Public Subnet
 resource "aws_subnet" "public" {
     for_each    = var.public_subnet
-    
+
     vpc_id                  = aws_vpc.main.id
     cidr_block              = each.value.cidr_block
     availability_zone       = each.value.az
-    map_on_public_launch_ip = true 
+    map_public_ip_on_launch = true
+
 
      tags = merge(local.common_tags, {
-        Name = "${local.name_resource}"
+        Name = "${local.name_resource}-public-${each.key}"
         Tier = "public"
     }) 
 }
 
+# Private Subnet
 resource "aws_subnet" "private" {
     for_each    = var.private_subnet
 
@@ -41,27 +44,29 @@ resource "aws_subnet" "private" {
     availability_zone = each.value.az
 
      tags = merge(local.common_tags, {
-        Name = "${local.name_resource}"
+        Name = "${local.name_resource}-private-${each.key}"
         Tier = "private"
     }) 
 }
 
+#Nat Gateway
 resource "aws_eip" "nat" {
     for_each    = var.enable_nat_gateway ? local.nat_gateway_map : {}
     domain      = "vpc"
 
     tags = merge(local.common_tags, {
-        Name = "${local.name_resource}-eip"
+        Name = "${local.name_resource}-nat-${each.key}"
     })
 }
+
 
 resource "aws_nat_gateway" "main" {
     for_each = var.enable_nat_gateway ? local.nat_gateway_map : {}
     allocation_id = aws_eip.nat[each.key].id
     subnet_id     = aws_subnet.public[each.key].id
 
-    tags = merge({local.common_tags}, {
-        Name = "${local.name_resource}-nat"
+    tags = merge(local.common_tags, {
+        Name = "${local.name_resource}"
     })
 
     depends_on = [aws_internet_gateway.main]
@@ -101,18 +106,21 @@ resource "aws_route_table" "private" {
 
 # Route Private
 resource "aws_route" "private_nat" {
-    for_each        = var.enable_nat_gateway ? var.private_subnet : {}
-    route_table_id  = aws_route_table.private[each.key].id : lookup(
-        local.nat_gateway_by_az,
-        each.value.az,
-        values(aws_nat_gateway.main)[0].id
-    )
+  for_each = var.enable_nat_gateway ? var.private_subnet : {}
+
+  route_table_id         = aws_route_table.private[each.key].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = var.single_nat_gateway ? values(aws_nat_gateway.main)[0].id : lookup(
+    local.nat_gateway_by_az,
+    each.value.az,
+    values(aws_nat_gateway.main)[0].id
+  )
 }
 
 # Route Table Association Private
 resource "aws_route_table_association" "private" {
-    for_each        = aws_subnet.Private
-    subnet_id       = each.value.vpc_id
+    for_each        = aws_subnet.private
+    subnet_id       = each.value.id
     route_table_id  = aws_route_table.private[each.key].id
 }
 
@@ -129,7 +137,7 @@ resource "aws_security_group" "app" {
             from_port   = ingress.value.from_port
             to_port     = ingress.value.to_port
             protocol    = ingress.value.protocol
-            cidr_block  = ingress.value.cidr_blocks
+            cidr_blocks = ingress.value.cidr_blocks
         }
     }
 
@@ -137,8 +145,8 @@ resource "aws_security_group" "app" {
         description = "Allow ALL Traffic Out"
         from_port   = 0
         to_port     = 0
-        protocol   = "-1"
-        cidr_block  = ["0.0.0.0/0"] 
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"] 
     }
 
     tags = merge(local.common_tags , {
