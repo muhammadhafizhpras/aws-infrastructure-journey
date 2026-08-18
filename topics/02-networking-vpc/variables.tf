@@ -54,7 +54,7 @@ variable "private_subnet" {
 variable "enable_nat_gateway" {
   description   = "NAT Gateway"
   type          = bool
-  default       = true
+  default       = false
 }
 
 variable "single_nat_gateway" {
