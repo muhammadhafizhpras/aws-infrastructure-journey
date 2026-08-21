@@ -32,20 +32,20 @@ ec2_instance = {
   web = {
     instance_type = "t3.micro"
     subnet_type   = "public"
-    public_ip     = true
+    public_ip     =  true
     role          = "Frontend Web Server"
     key_name      = "frontend-key"
   }
   app = {
       instance_type = "t3.micro"
-      public_ip     = false
+      public_ip     =  false
       subnet_type   = "private"
       role          = "Backend API Server"
       key_name      = "backend-key"
   }
   database = {
       instance_type = "t3.micro"
-      public_ip     = false
+      public_ip     =  false
       subnet_type   = "private"
       role          = "Database Server"
       key_name      = "database-key"
