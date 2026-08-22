@@ -10,8 +10,9 @@ variable "environment" {
     description =  "ENV tag (dev, stag, prod)"
 
     validation {
-        condition   = contains (["dev", "stag", "prod"])
-    }  
+    condition = contains (["dev","stag","prod"], var.environment)
+    error_message = "Environtment : dev, stag, prod"
+  }
 }
 
 variable "project_name" {
@@ -39,7 +40,7 @@ variable "enable_intelligent_tiering" {
 
 variable "intelligent_tiering_days" {
   type        = number
-  default     = 
+  default     = 30
   description = "description"
 }
 
@@ -98,7 +99,7 @@ variable "glacier_deep_archive_days" {
   description = "Days for trasition from glacier flexible to glacier deep archive"
 }
 
-variable "enable_object_lock {
+variable "enable_object_lock" {
   type        = bool
   default     = true
   description = "Enable Object Lock"
