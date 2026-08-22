@@ -2,6 +2,23 @@
 
 Amazon S3 is an object storage service that offers industry-leading scalability, data availability, security, and performance.
 
+> **Pricing Note:** All prices below are based on the **ap-southeast-3 (Jakarta)** region as of 2026. Jakarta region has approximately an **18% premium** compared to us-east-1 (N. Virginia).
+
+---
+
+## S3 Storage Classes Pricing Overview (Jakarta)
+
+| Storage Class | Storage Cost ($/GB-month) | Retrieval Fee ($/GB) | Monitoring Fee | Min Duration | Min Size |
+|---------------|---------------------------|----------------------|----------------|--------------|----------|
+| S3 Standard | $0.027 (first 50TB) | None | None | None | None |
+| S3 Intelligent-Tiering | $0.027 | None (varies by tier) | $0.0025/1K objects | None | None |
+| S3 Standard-IA | $0.0148 | $0.01 | None | 30 days | 128 KB |
+| S3 Express One Zone | $0.192 | None (same AZ) | None | None | 512 KB |
+| S3 One Zone-IA | $0.0118 | $0.01 | None | 30 days | 128 KB |
+| S3 Glacier Instant | $0.0047 | $0.03 | None | 90 days | 128 KB |
+| S3 Glacier Flexible | $0.0042 | $0.01 - $0.03 | None | 90 days | 40 KB |
+| S3 Glacier Deep Archive | $0.0012 | $0.0025 | None | 180 days | 40 KB |
+
 ---
 
 ## 1. S3 Standard
@@ -14,11 +31,21 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Milliseconds.
 
-**Cost:** Highest per-GB storage cost compared to other classes, but request costs (API calls like GET/PUT) are very low. No retrieval fees.
-
 **Advantages:** Lowest latency, best performance for access-intensive workloads, no operational restrictions or penalties.
 
 **Disadvantages:** Very expensive if used for infrequently accessed or historical backup data.
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Tier | Storage Cost | Notes |
+|------|-------------|-------|
+| First 50 TB/month | $0.027/GB | Standard tier |
+| Next 450 TB/month | $0.026/GB | Volume discount |
+| Over 500 TB/month | $0.025/GB | Highest volume |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Per request |
+| GET/SELECT requests | $0.0004/1,000 requests | Per request |
+| Data transfer out to internet | $0.106/GB | First 10TB/month |
+| Data transfer out to CloudFront | Free | Same region |
 
 | Attribute | Value |
 |-----------|-------|
@@ -39,11 +66,20 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Milliseconds for Frequent, Infrequent, and Instant Archive tiers. Hours for Archive and Deep Archive tiers.
 
-**Cost:** Combination of storage cost (based on the current tier) + monthly monitoring fee per 1,000 objects. No retrieval fees.
-
 **Advantages:** Automatic cost savings without complex Lifecycle Rules. No surprise charges if cold data is suddenly accessed.
 
 **Disadvantages:** Additional monitoring fees. Not cost-effective for millions of very small files (under 128 KB).
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Tier | Storage Cost | Notes |
+|------|-------------|-------|
+| Frequent Access | $0.027/GB | Same as S3 Standard |
+| Infrequent Access | $0.0148/GB | Same as Standard-IA |
+| Archive Access | $0.0047/GB | Same as Glacier Instant |
+| Deep Archive Access | $0.0012/GB | Same as Glacier Deep Archive |
+| Monitoring fee | $0.0025/1,000 objects/month | For objects over 128 KB |
+| Retrieval fee | Free | No retrieval charges |
 
 | Attribute | Value |
 |-----------|-------|
@@ -64,11 +100,19 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Milliseconds.
 
-**Cost:** ~40% cheaper than S3 Standard for storage. Retrieval fees apply per GB each time data is downloaded.
-
 **Advantages:** Same speed performance as S3 Standard at a lower storage cost.
 
 **Disadvantages:** If predictions are wrong and data is frequently downloaded, monthly bills can spike due to retrieval fees.
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.0148/GB-month | ~45% cheaper than Standard |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Same as Standard |
+| GET/SELECT requests | $0.0004/1,000 requests | Same as Standard |
+| Retrieval fee | $0.01/GB | Charged per GB downloaded |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
@@ -89,11 +133,18 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** 1 to 5 milliseconds (fastest among all S3 classes).
 
-**Cost:** Slightly higher storage cost, but API request fees are up to 50% cheaper than S3 Standard.
-
-**Advantages:** Extreme performance with very stable latency, supporting hundreds of thousands of transactions per second (TPS).
+**Advantages:** Extreme performance with very stable latency, supporting hundreds of thousands of transactions per second (TPS). API request fees are up to 50% cheaper than S3 Standard.
 
 **Disadvantages:** Vulnerable to data loss if the physical AZ experiences a disaster, as there is no replication to other AZs.
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.192/GB-month | ~7x more expensive than Standard |
+| PUT/COPY/POST/LIST requests | $0.0025/1,000 requests | 50% cheaper than Standard |
+| GET/SELECT requests | $0.0002/1,000 requests | 50% cheaper than Standard |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
@@ -114,11 +165,19 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Milliseconds.
 
-**Cost:** ~20% cheaper than Standard-IA. Retrieval fees per GB still apply.
-
 **Advantages:** Most affordable millisecond-access option in the S3 ecosystem.
 
 **Disadvantages:** Risk of permanent data loss if the AZ is physically destroyed (e.g., earthquake, data center fire).
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.0118/GB-month | ~20% cheaper than Standard-IA |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Same as Standard |
+| GET/SELECT requests | $0.0004/1,000 requests | Same as Standard |
+| Retrieval fee | $0.01/GB | Charged per GB downloaded |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
@@ -139,11 +198,19 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Milliseconds.
 
-**Cost:** Very low storage cost (similar to Glacier), but the highest per-GB retrieval cost among all instant-response storage options.
-
-**Advantages:** Bridges the gap between Glacier's low price and Standard-IA's instant access requirements.
+**Advantages:** Bridges the gap between Glacier's low price and Standard-IA's instant access requirements. 68% cheaper than Standard-IA.
 
 **Disadvantages:** Penalty fees for frequent data access can escalate quickly. Retention penalties are stricter (90 days).
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.0047/GB-month | 68% cheaper than Standard-IA |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Same as Standard |
+| GET/SELECT requests | $0.0004/1,000 requests | Same as Standard |
+| Retrieval fee | $0.03/GB | Highest among instant-response classes |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
@@ -167,11 +234,22 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 - **Standard:** 3-5 hours
 - **Bulk:** 5-12 hours (free)
 
-**Cost:** Very low storage cost. Bulk retrieval is free, but faster options incur additional charges.
-
 **Advantages:** Well-balanced option for massive backups due to low storage cost and free bulk retrieval.
 
 **Disadvantages:** Applications or users cannot read files in real-time; data must go through a staging process first.
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.0042/GB-month | ~84% cheaper than Standard |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Same as Standard |
+| GET/SELECT requests | $0.0004/1,000 requests | Same as Standard |
+| **Retrieval fees:** | | |
+| - Expedited | $0.03/GB | 1-5 minutes |
+| - Standard | $0.01/GB | 3-5 hours |
+| - Bulk | Free | 5-12 hours |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
@@ -192,11 +270,21 @@ Amazon S3 is an object storage service that offers industry-leading scalability,
 
 **Access time:** Slowest of all. Standard retrieval: 12 hours. Bulk retrieval: up to 48 hours.
 
-**Cost:** Cheapest in AWS S3 (under $1 USD per Terabyte per month). Retrieval fees apply when data is accessed, though rates are low.
-
-**Advantages:** Provides extraordinary cost efficiency for petabyte-scale data volumes mandated by law.
+**Advantages:** Provides extraordinary cost efficiency for petabyte-scale data volumes mandated by law. Under $1 USD per Terabyte per month.
 
 **Disadvantages:** Data is completely non-operational. Up to 2-day wait times make this tier irrelevant for critical system Disaster Recovery.
+
+### Pricing (ap-southeast-3 / Jakarta)
+
+| Component | Cost | Notes |
+|-----------|------|-------|
+| Storage | $0.0012/GB-month | ~96% cheaper than Standard |
+| PUT/COPY/POST/LIST requests | $0.005/1,000 requests | Same as Standard |
+| GET/SELECT requests | $0.0004/1,000 requests | Same as Standard |
+| **Retrieval fees:** | | |
+| - Standard | $0.02/GB | 12 hours |
+| - Bulk | $0.0025/GB | 48 hours |
+| Data transfer out | $0.106/GB | First 10TB/month |
 
 | Attribute | Value |
 |-----------|-------|
